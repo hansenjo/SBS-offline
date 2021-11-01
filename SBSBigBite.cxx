@@ -120,7 +120,7 @@ Int_t SBSBigBite::ReadRunDatabase( const TDatime &date ){
 
   //Require magdist:
   const DBRequest req[] = {
-    { "magdist", &fMagDist, kDouble, 0, 0, 1 },
+    { "magdist", &fMagDist, kDouble, 0, false, 1 },
     { nullptr }
   };
   err = LoadDB( file, date, req );
@@ -163,29 +163,29 @@ Int_t SBSBigBite::ReadDatabase( const TDatime& date )
   double opticsthetadeg = fOpticsAngle * TMath::RadToDeg(); 
   
   const DBRequest request[] = {
-    { "gemtheta", &gemthetadeg, kDouble, 0, 1, 1},
-    { "gemphi", &gemphideg, kDouble, 0, 1, 1},
-    { "gemorigin_xyz",    &firstgem_offset, kDoubleV,  0, 1, 1},
-    { "opticstheta", &opticsthetadeg, kDouble, 0, 1, 1},
-    { "optics_origin", &optics_origin, kDoubleV, 0, 1, 1},
-    { "optics_order",    &fOpticsOrder, kUInt,  0, 1, 1},
-    { "optics_parameters", &optics_param, kDoubleV, 0, 1, 1},
-    { "ecalo_fudgefactor", &fECaloFudgeFactor, kDouble, 0, 1, 1},
-    { "do_pid",    &pidflag, kInt,  0, 1, 1},
-    { "frontconstraintwidth_x", &fFrontConstraintWidthX, kDouble, 0, 1, 0},
-    { "frontconstraintwidth_y", &fFrontConstraintWidthY, kDouble, 0, 1, 0},
-    { "backconstraintwidth_x", &fBackConstraintWidthX, kDouble, 0, 1, 0},
-    { "backconstraintwidth_y", &fBackConstraintWidthY, kDouble, 0, 1, 0},
-    { "frontconstraint_x0", &fFrontConstraintX0, kDouble, 0, 1, 0},
-    { "frontconstraint_y0", &fFrontConstraintY0, kDouble, 0, 1, 0},
-    { "trackgrinchcorr_const", &fTrackGrinchClusCorr_0, kDouble, 0, 1, 0},
-    { "trackgrinchcorr_slope", &fTrackGrinchClusCorr_1, kDouble, 0, 1, 0},
-    { "trackgrinchcorr_sigma", &fTrackGrinchClusCorr_Sigma, kDouble, 0, 1, 0},
-    { "psshPIDprobatable",    &pssh_pidproba, kDoubleV,  0, 1, 0},
-    { "pcalPIDprobatable",    &pcal_pidproba, kDoubleV,  0, 1, 0},
-    { "grinchPIDpbins",    &fP_table, kDoubleV,  0, 1, 0},
-    { "grinchPIDprobatable",    &grinch_pidproba, kDoubleV,  0, 1, 0},
-    {0}
+    { "gemtheta", &gemthetadeg, kDouble, 0, true, 1},
+    { "gemphi", &gemphideg, kDouble, 0, true, 1},
+    { "gemorigin_xyz",    &firstgem_offset, kDoubleV,  0, true, 1},
+    { "opticstheta", &opticsthetadeg, kDouble, 0, true, 1},
+    { "optics_origin", &optics_origin, kDoubleV, 0, true, 1},
+    { "optics_order",    &fOpticsOrder, kUInt,  0, true, 1},
+    { "optics_parameters", &optics_param, kDoubleV, 0, true, 1},
+    { "ecalo_fudgefactor", &fECaloFudgeFactor, kDouble, 0, true, 1},
+    { "do_pid",    &pidflag, kInt,  0, true, 1},
+    { "frontconstraintwidth_x", &fFrontConstraintWidthX, kDouble, 0, true, 0},
+    { "frontconstraintwidth_y", &fFrontConstraintWidthY, kDouble, 0, true, 0},
+    { "backconstraintwidth_x", &fBackConstraintWidthX, kDouble, 0, true, 0},
+    { "backconstraintwidth_y", &fBackConstraintWidthY, kDouble, 0, true, 0},
+    { "frontconstraint_x0", &fFrontConstraintX0, kDouble, 0, true, 0},
+    { "frontconstraint_y0", &fFrontConstraintY0, kDouble, 0, true, 0},
+    { "trackgrinchcorr_const", &fTrackGrinchClusCorr_0, kDouble, 0, true, 0},
+    { "trackgrinchcorr_slope", &fTrackGrinchClusCorr_1, kDouble, 0, true, 0},
+    { "trackgrinchcorr_sigma", &fTrackGrinchClusCorr_Sigma, kDouble, 0, true, 0},
+    { "psshPIDprobatable",    &pssh_pidproba, kDoubleV,  0, true, 0},
+    { "pcalPIDprobatable",    &pcal_pidproba, kDoubleV,  0, true, 0},
+    { "grinchPIDpbins",    &fP_table, kDoubleV,  0, true, 0},
+    { "grinchPIDprobatable",    &grinch_pidproba, kDoubleV,  0, true, 0},
+    {nullptr}
   };
     
   Int_t status = LoadDB( file, date, request, fPrefix, 1 ); //The "1" after fPrefix means search up the tree
@@ -1062,9 +1062,9 @@ void SBSBigBite::CalcTrackTiming(THaTrack* the_track)
 //_____________________________________________________________________________
 void SBSBigBite::CalcTrackPID(THaTrack* the_track)
 {
-  if(fEpsEtotRatio.size()==0 || fEtot.size()==0 || 
-     fFrontConstraintX.size()==0 || fFrontConstraintY.size()==0 ||
-     fBackConstraintX.size()==0 || fBackConstraintY.size()==0)return;
+  if(fEpsEtotRatio.empty() || fEtot.empty() ||
+     fFrontConstraintX.empty() || fFrontConstraintY.empty() ||
+     fBackConstraintX.empty() || fBackConstraintY.empty())return;
   
   //particles: 0: electron, 1: pion
   //detectors: 0: ps/sh
