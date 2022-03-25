@@ -68,7 +68,7 @@ set(sources MPDModule.cxx MPDModuleVMEv4.cxx SBSBigBite.cxx
   SBSBPM.cxx SBSRaster.cxx SBSRasteredBeam.cxx 
   LHRSScalerEvtHandler.cxx SBSScalerEvtHandler.cxx
   gmn_tree_digitized.cxx VETROC.cxx
-  )
+  SBSRun.cxx)
 #gmn_tree_digitized.C
 #g4sbs_data.cxx g4sbs_tree.cxx
 #gmn_dig_tree.cxx  SBSSimMPD.cxx SBSBBShowerCluster.cxx SBSShowerBlock.cxx
